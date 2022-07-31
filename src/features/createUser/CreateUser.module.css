@@ -1,0 +1,39 @@
+.btn{
+  color: white;
+  background: #292727;
+  display: block;
+  font-weight:bolder;
+  font-size: 1em;
+  height: 100%;
+  width: 100%;
+  padding: 0.2em;
+  border-style: none;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.1rem;
+  appearance: none;
+}
+
+input{
+  border: none;
+  border-radius: 0.5em;
+  margin: 0 1em;
+  height: 2rem;
+  width: 100%;
+  font: inherit;
+  font-size:1em;
+  color: rgb(104, 103, 103);
+  padding: 0.5em;
+}
+input:focus{
+  outline: none;
+}
+
+@media screen and (min-width: 900px) {
+  input{
+    width: 80%;
+  }
+  .btn{
+    width: auto;
+  }
+}
