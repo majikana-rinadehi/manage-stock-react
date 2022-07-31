@@ -1,6 +1,6 @@
 import { FunctionComponent, useState } from "react";
 import { ShoppingItem } from "../shoppingList/ShoppingItem";
-import type { Item as ItemType } from '../items/Item'
+import type { Item as ItemType } from '@/common/types'
 import { SendMessage } from "../sendMessage/SendMessage";
 
 export type Props = {
@@ -8,28 +8,28 @@ export type Props = {
 }
 
 const initItems: ItemType[] = [
-    {
-        "id": "1",
-        "category_id": "1",
-        "category_name": "食材",
-        "name": "きゅうり",
-        "value": 1,
-        "period": 1,
-        "unitName": "本",
-        "addDate": "17:29:13",
-        "updDate": "17:29:13"
-    },
-    {
-        "id": "1",
-        "category_id": "1",
-        "category_name": "食材",
-        "name": "きゅうり",
-        "value": 1,
-        "period": 1,
-        "unitName": "本",
-        "addDate": "17:29:13",
-        "updDate": "17:29:13"
-    },
+    // {
+    //     "itemid": "1",
+    //     "category_id": "1",
+    //     "category_name": "食材",
+    //     "name": "きゅうり",
+    //     "value": 1,
+    //     "period": 1,
+    //     "unitName": "本",
+    //     "addDate": "17:29:13",
+    //     "updDate": "17:29:13"
+    // },
+    // {
+    //     "id": "1",
+    //     "category_id": "1",
+    //     "category_name": "食材",
+    //     "name": "きゅうり",
+    //     "value": 1,
+    //     "period": 1,
+    //     "unitName": "本",
+    //     "addDate": "17:29:13",
+    //     "updDate": "17:29:13"
+    // },
 ]
 
 export const ShoppingList: FunctionComponent<Props> = ({ closeModal }) => {

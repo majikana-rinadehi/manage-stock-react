@@ -1,23 +1,9 @@
 import React, { FunctionComponent } from "react"
 import { useNavigate } from "react-router-dom";
-
-export interface Item {
-
-    id: string;
-    category_id: string;
-    category_name: string;
-    name: string;
-    value: number;
-    period: number;
-    /**単位 */
-    unitName: string;
-    /**追加日時・更新日時 */
-    addDate: string;
-    updDate: string;
-}
+import type { Item as ItemType} from '@/common/types'
 
 export type Props = {
-    item: Item,
+    item: ItemType,
     openModal?: () => void
 }
 
@@ -61,7 +47,7 @@ export const ShoppingItem: FunctionComponent<Props> = ({ item, openModal }) => {
                 </div>
                 <div className="mr-auto font-bold">
                     {/* <!--アイテム名--> */}
-                    {item.name}
+                    {item.itemName}
                 </div>
                 <div className="mr-3">
                     <button

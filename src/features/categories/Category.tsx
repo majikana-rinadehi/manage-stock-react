@@ -1,19 +1,19 @@
 import { FunctionComponent } from "react"
 import { FilterBar } from "../filterBar/FilterBar"
 import { Items } from "../items/Items"
+import type { Category as CategoryType } from '@/common/types'
 
 export type Props = {
-    categoryName: string
+    category: CategoryType
 }
 
-export const Category: FunctionComponent<Props> = ({categoryName}) => {
+export const Category: FunctionComponent<Props> = ({category}) => {
     return (
         <>  
             <div className="flex">
                 <div className="ml-4 mr-auto font-black text-lg">
                     {/* <!--カテゴリ名--> */}
-                    {categoryName}
-                    {/* {{ category.name }} */}
+                    {category.categoryName}
                 </div>
                 <button
                     className="mr-4 hover:bg-gray-500"

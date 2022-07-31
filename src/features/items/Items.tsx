@@ -4,33 +4,12 @@ import type { Item as ItemType } from "./Item"
 import { AddFormButton } from "../../components/AddFormButton"
 import { ItemEdit } from "../itemEdit/ItemEdit"
 import { useState } from "react"
-
-const initItems: ItemType[] = [
-    {
-        "id": "1",
-        "category_id": "1",
-        "category_name": "食材",
-        "name": "きゅうり",
-        "value": 1,
-        "period": 1,
-        "unitName": "本",
-        "addDate": "17:29:13",
-        "updDate": "17:29:13"
-    },
-    {
-        "id": "1",
-        "category_id": "1",
-        "category_name": "食材",
-        "name": "きゅうり",
-        "value": 1,
-        "period": 1,
-        "unitName": "本",
-        "addDate": "17:29:13",
-        "updDate": "17:29:13"
-    },
-]
+import { useAppSelector } from "../../app/hooks"
+import { selectItems } from "./itemsSlice"
 
 export const Items: FunctionComponent = () => {
+
+    const items = useAppSelector(selectItems)
 
     const [showEdit, setShowEdit] = useState<boolean>(false)
 
@@ -46,7 +25,7 @@ export const Items: FunctionComponent = () => {
     return (
         <>
             {
-                initItems.map(item => {
+                items.map(item => {
                     return (
                         <Item 
                             item={item} 
