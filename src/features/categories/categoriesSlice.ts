@@ -9,19 +9,6 @@ const initCategories: Category[] = [
         categoryName: '食料品',
         addDate: '20220731',
         updDate: '20220731',
-        items: [
-            {
-                itemId: 'item_a',
-                itemName: 'きゅうり',
-                categoryId: 'category_a',
-                categoryName: '食料品',
-                amount: 1,
-                unitName: '本',
-                period: 1,
-                addDate: '20220731',
-                updDate: '20220731'
-            }
-        ]
     }
 ]
 
@@ -35,7 +22,6 @@ export const categoriesSlice = createSlice({
                 categoryName: action.payload.newCategoryName,
                 addDate: format(new Date(), 'yyyyMMdd'),
                 updDate: format(new Date(), 'yyyyMMdd'),
-                items: []
             })
         },
         deleteCategory: (state, action: PayloadAction<{categoryId: string}>) => {

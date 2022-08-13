@@ -1,18 +1,87 @@
-import { FunctionComponent } from "react"
+import { ChangeEvent, FunctionComponent, useEffect, useState } from "react"
+import type { Item as ItemType } from '@/common/types'
 import { FormItem } from "../../components/FormItem"
+import {
+    updateItem,
+    deleteItem
+} from '../../features/items/itemsSlice'
+import { useAppDispatch } from "../../app/hooks"
 
 export type Props = {
     // categoryName: string
-    closeModal?: () => void
+    closeModal: () => void
+    editingItem: ItemType
 }
 
-export const ItemEdit: FunctionComponent<Props> = ({ closeModal }) => {
+/** `ItemType` のうち、編集フォームに必要なプロパティだけを抜粋 */
+type ItemEditForm = Pick<ItemType, 'amount' | 'itemName' | 'unitName' | 'period' >
+
+export const ItemEdit: FunctionComponent<Props> = ({ closeModal, editingItem }) => {
+
+    const [form, setForm] = useState<ItemEditForm>()
+
+    const dispatch = useAppDispatch()
+
+    const init = () => {
+        console.log('mounted')
+        const initForm: ItemEditForm = {
+            amount: editingItem.amount,
+            itemName: editingItem.itemName,
+            period: editingItem.period,
+            unitName: editingItem.unitName
+        }
+        console.log('initForm', initForm)
+        setForm(initForm)
+        // この段階ではまだ undefined と表示される
+        // =>componentDidMount()のスコープ内だから? 
+        console.log(form)
+    }
+
+    const clear = () => {
+        console.log('unmounted')
+    }
+
+    useEffect(() => {
+        // same as componentDidMount()
+        init()
+        return () => {
+            // same as componentWillUnmount()
+            clear()
+        }
+    }, [])
+
+    const onInputChange = (e: ChangeEvent<HTMLInputElement>, itemName: string) => {
+        console.log('e.target.value:', e.target.value)
+        console.log('itemName', itemName)
+        setForm((prevForm) => {
+            if (prevForm) {
+                const newForm = {...prevForm}
+                // TODO: HACK! 
+                // @ts-ignore
+                newForm[itemName] = e.target.value
+                return newForm
+            }
+        })
+    }
+
+    const onClickUpdateButton = () => {
+        const newItem = Object.assign({...editingItem}, form)
+        console.log('newItem:', newItem)
+        dispatch(updateItem({itemId: editingItem.itemId, newItem: newItem}))
+        closeModal()
+    }
+
+    const onClickDeleteButton = () => {
+        dispatch(deleteItem({itemId: editingItem.itemId}))
+        closeModal()
+    }
+
     return (
         <>
             <div
                 className="overflow-y-scroll fixed  top-0 left-0 right-0 flex justify-center mt-40 text-inherit"
                 style={{ 'maxHeight': '70%' }}
-            >
+                >
                 {/* style maxHeight: '90%'だとスクロールしない */}
                 {/* <!--②アイテム編集(モーダル)--> */}
                 <div
@@ -26,8 +95,8 @@ export const ItemEdit: FunctionComponent<Props> = ({ closeModal }) => {
                 <div
                     className="overflow-y-scroll w-80 bg-white relative rounded-xl p-5"
                     style={{ 'maxHeight': '90%' }}
-                // style="max-width: 400px;"
-                >
+                    // style="max-width: 400px;"
+                    >
                     <div className="flex justify-end">
                         {/* <!--戻るボタン、削除ボタン--> */}
                         <div className="mr-auto">
@@ -42,6 +111,7 @@ export const ItemEdit: FunctionComponent<Props> = ({ closeModal }) => {
                         </div>
                         <div>
                             <button
+                                onClick={() => onClickDeleteButton()}
                                 className="px-4 py-2 bg-red-500 hover:bg-red-700 
                         text-white rounded-lg font-bold text-xs"
                             // @click="$emit('deleteItem', form.id)"
@@ -51,14 +121,32 @@ export const ItemEdit: FunctionComponent<Props> = ({ closeModal }) => {
                             {/* <!--削除--> */}
                         </div>
                     </div>
-                    <FormItem itemName="アイテム名" />
+                    {   
+                        form
+                        ?
+                        Object.entries(form!).map((property, i) => {
+                            return (
+                                <FormItem 
+                                    itemName={property[0]} 
+                                    value={property[1]} 
+                                    onInputChange={onInputChange}
+                                    key={i}
+                                />
+                            )
+                        })
+                        :
+                        null
+                    }
+                    {/* <FormItem itemName="アイテム名" />
                     <FormItem itemName="数量" />
                     <FormItem itemName="単位" />
-                    <FormItem itemName="残り日数" />
+                    <FormItem itemName="残り日数" /> */}
                     <div>
                         {/* <!-- 更新ボタン --> */}
-                        <button className="px-4 py-2 bg-green-500 hover:bg-green-700 
-                    text-white rounded-lg font-bold text-xs"
+                        <button 
+                            onClick={() => onClickUpdateButton()}
+                            className="px-4 py-2 bg-green-500 hover:bg-green-700 
+                            text-white rounded-lg font-bold text-xs"
                         // @click="$emit('updateItem', form)"
                         >
                             更新

@@ -18,5 +18,4 @@ export interface Category {
     categoryName: string
     addDate: string
     updDate: string
-    items: Item[]
 }

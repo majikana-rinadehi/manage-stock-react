@@ -35,7 +35,8 @@ export function Home() {
                 <ToolBar 
                     emitButtonName={handleToolBarEvent}
                     />
-                <Categories />
+                <Categories 
+                    />
                 {
                     showShoppingList
                         ?
