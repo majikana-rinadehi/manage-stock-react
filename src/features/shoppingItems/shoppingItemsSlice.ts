@@ -2,25 +2,21 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { Item } from "@/common/types";
 import { RootState } from '@/app/store'
 import { format } from 'date-fns'
+import { useAppSelector } from "../../app/hooks";
+import { selectItems } from "../items/itemsSlice";
 
-const initItems: Item[] = [
-    {
-        itemId: 'item_a',
-        itemName: 'きゅうり',
-        categoryId: 'category_a',
-        categoryName: '食料品',
-        amount: 1,
-        unitName: '本',
-        period: 1,
-        addDate: '20220731',
-        updDate: '20220731'
-    }
-]
+const initItems: Item[] = []
 
-export const itemsSlice = createSlice({
-    name: 'items',
+export const shoppingItemsSlice = createSlice({
+    name: 'shoppingItems',
     initialState: initItems,
     reducers: {
+
+        initializeItems: (state, action: PayloadAction<{items: Item[]}>) => {
+            state = [...action.payload.items]
+            console.log('state:', state)
+        },
+
         addItem: (state, action: PayloadAction<{newItemName: string}>) => {
             const nowDate: Date = new Date()
             state.push({
@@ -65,28 +61,17 @@ export const itemsSlice = createSlice({
                 state.findIndex((item => item.itemId === action.payload.itemId))
                 , 1
             )
-        },
-
-        incrementItem: (state, action: PayloadAction<{itemId: string, increaseAmount: number}>) => {
-            state = state.map(item => {
-                if (item.itemId = action.payload.itemId) {
-                    item.amount += action.payload.increaseAmount
-                }
-                return item
-            })
         }
-        
     }
-
 })
 
 export const {
+    initializeItems,
     addItem,
     updateItem,
-    deleteItem,
-    incrementItem
-} = itemsSlice.actions
+    deleteItem
+} = shoppingItemsSlice.actions
 
-export default itemsSlice.reducer
+export default shoppingItemsSlice.reducer
 
-export const selectItems = (state: RootState) => state.items
+export const selectShoppingItems = (state: RootState) => state.shoppingItems

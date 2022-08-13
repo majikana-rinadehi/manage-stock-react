@@ -4,22 +4,15 @@ import type { Item as ItemType } from '@/common/types'
 export type Props = {
     item: ItemType,
     openModal?: (item: ItemType) => void
+    onClickPlus: (e: React.MouseEvent, itemId: string) => void
+    onClickMinus: (e: React.MouseEvent, itemId: string) => void
 }
 
-export const Item: FunctionComponent<Props> = ({ item, openModal }) => {
-
-    const onClickPlus = (e: React.MouseEvent) => {
-        e.stopPropagation()
-        console.log('plus')
-    }
-    const onClickMinus = (e: React.MouseEvent) => {
-        e.stopPropagation()
-        console.log('minus')
-    }
+export const Item: FunctionComponent<Props> = ({ item, openModal, onClickPlus, onClickMinus }) => {
 
     return (
         <>
-            <div 
+            <div
                 onClick={() => {
                     if (!openModal) return
                     openModal(item)
@@ -53,7 +46,11 @@ export const Item: FunctionComponent<Props> = ({ item, openModal }) => {
                 <div className="mr-3">
                     <button
                         className="align-middle mr-2"
-                        onClick={(e) => onClickPlus(e)}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            onClickPlus(e, item.itemId)
+                        }
+                        }
                     // @click.stop="incrementValue(item.id)"
                     >
                         {/* <!--プラスボタン--> */}
@@ -62,11 +59,14 @@ export const Item: FunctionComponent<Props> = ({ item, openModal }) => {
                         </svg>
                     </button>
                     <span className="border rounded-lg px-4 py-2 text-xs">
-                        {/* {{item.value + item.unit_name}} */}
+                        {item.amount + item.unitName}
                     </span>
                     <button
                         className="align-middle ml-2"
-                        onClick={(e) => onClickMinus(e)}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            onClickMinus(e, item.itemId)
+                        }}
                     >
                         {/* <!--マイナスボタン--> */}
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">

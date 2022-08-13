@@ -5,7 +5,7 @@ import { AddFormButton } from "../../components/AddFormButton"
 import { ItemEdit } from "../itemEdit/ItemEdit"
 import { useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { selectItems, addItem } from "./itemsSlice"
+import { selectItems, addItem, incrementItem } from "./itemsSlice"
 
 export const Items: FunctionComponent = () => {
 
@@ -36,12 +36,22 @@ export const Items: FunctionComponent = () => {
         dispatch(addItem({newItemName}))
     }
 
+    const onClickPlus = (e: React.MouseEvent, itemId: string) => {
+        dispatch(incrementItem({itemId, increaseAmount: 1}))
+    }
+    
+    const onClickMinus = (e: React.MouseEvent, itemId: string) => {
+        dispatch(incrementItem({itemId, increaseAmount: -1}))
+    }
+
     return (
         <>
             {
                 items.map(item => {
                     return (
                         <Item 
+                            onClickPlus={onClickPlus}
+                            onClickMinus={onClickMinus}
                             item={item} 
                             openModal={openModal}
                             key={item.itemId}

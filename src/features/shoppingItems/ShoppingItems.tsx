@@ -1,43 +1,58 @@
-import { FunctionComponent, useState } from "react";
-import { ShoppingItem } from "../shoppingList/ShoppingItem";
-import type { Item as ItemType } from '@/common/types'
+import { FunctionComponent, useEffect, useState } from "react";
+import { ShoppingItem } from "./ShoppingItem";
 import { SendMessage } from "../sendMessage/SendMessage";
+import { useAppSelector } from "../../app/hooks";
+import { selectItems } from "../items/itemsSlice";
+import type { Item } from '../../common/types'
 
 export type Props = {
     closeModal: () => void
 }
 
-const initItems: ItemType[] = [
-    // {
-    //     "itemid": "1",
-    //     "category_id": "1",
-    //     "category_name": "食材",
-    //     "name": "きゅうり",
-    //     "value": 1,
-    //     "period": 1,
-    //     "unitName": "本",
-    //     "addDate": "17:29:13",
-    //     "updDate": "17:29:13"
-    // },
-    // {
-    //     "id": "1",
-    //     "category_id": "1",
-    //     "category_name": "食材",
-    //     "name": "きゅうり",
-    //     "value": 1,
-    //     "period": 1,
-    //     "unitName": "本",
-    //     "addDate": "17:29:13",
-    //     "updDate": "17:29:13"
-    // },
-]
-
 export const ShoppingList: FunctionComponent<Props> = ({ closeModal }) => {
 
-    const [showSendMessage, setShowSendMessage] = useState(false)
+    const items = useAppSelector(selectItems)
+
+    const [showSendMessage, setShowSendMessage] = useState<boolean>(false)
+    const [shoppingItems, setShoppingItems] = useState<Item[]>(items)
 
     const closeSendMessage = () => {
         setShowSendMessage(false)
+    }
+
+    const onClickDeleteButton = (itemId: string) => {
+        const newShoppingItems = shoppingItems.filter(item => item.itemId !== itemId)
+        setShoppingItems(newShoppingItems)
+    }
+
+    const onClickResetButton = () => {
+        setShoppingItems(items)
+    }
+
+    const onClickPlus = (e: React.MouseEvent, itemId: string) => {
+        const newShoppintItems = shoppingItems.map(item => {
+            if (item.itemId === itemId) {
+                return {
+                    ...item,
+                    amount: item.amount + 1
+                }
+            }
+            return item
+        })
+        setShoppingItems(newShoppintItems)
+    }
+    
+    const onClickMinus = (e: React.MouseEvent, itemId: string) => {
+        const newShoppintItems = shoppingItems.map(item => {
+            if (item.itemId === itemId) {
+                return {
+                    ...item,
+                    amount: item.amount - 1
+                }
+            }
+            return item
+        })
+        setShoppingItems(newShoppintItems)
     }
 
     return (
@@ -78,7 +93,7 @@ export const ShoppingList: FunctionComponent<Props> = ({ closeModal }) => {
                     {/* <!-- リセットボタン --> */}
                     <div>
                         <button
-                            // @click="resetItems"
+                            onClick={() => onClickResetButton()}
                             className="px-4 py-2 bg-yellow-500 active:bg-yellow-600 sm:hover:bg-yellow-600 text-white rounded-lg mr-2 font-bold text-xs"
                         >リセット
                         </button>
@@ -120,7 +135,18 @@ export const ShoppingList: FunctionComponent<Props> = ({ closeModal }) => {
                             className="bg-gray-200 p-2 text-sm m-auto">
                         </div>
                         {
-                            initItems.map(item => <ShoppingItem item={item} />)
+                            shoppingItems.map(item => {
+
+                                return (
+                                    <ShoppingItem 
+                                        item={item} 
+                                        onClickDeleteButton={onClickDeleteButton}
+                                        onClickPlus={onClickPlus}
+                                        onClickMinus={onClickMinus}    
+                                    />
+                                )
+                            
+                            })
                         }
 
                     </div>

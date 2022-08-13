@@ -1,7 +1,7 @@
 import { Categories } from "../features/categories/Categories"
 import { useNavigate } from "react-router-dom"
 import { ToolBar } from "../components/ToolBar"
-import { ShoppingList } from "../features/shoppingList/ShoppingList"
+import { ShoppingList } from "../features/shoppingItems/ShoppingItems"
 import { useState } from "react"
 
 export function Home() {

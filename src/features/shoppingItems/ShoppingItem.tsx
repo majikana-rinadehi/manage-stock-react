@@ -5,16 +5,13 @@ import type { Item as ItemType} from '@/common/types'
 export type Props = {
     item: ItemType,
     openModal?: () => void
+    onClickDeleteButton: (itemId: string) => void
+    onClickPlus: (e: React.MouseEvent, itemId: string) => void
+    onClickMinus: (e: React.MouseEvent, itemId: string) => void
 }
 
-export const ShoppingItem: FunctionComponent<Props> = ({ item, openModal }) => {
-
-    const navigate = useNavigate()
-
-    const onClickPlus = (e: React.MouseEvent) => {
-        e.stopPropagation()
-        console.log('plus')
-    }
+export const ShoppingItem: FunctionComponent<Props> = 
+    ({ item, openModal, onClickDeleteButton, onClickPlus, onClickMinus }) => {
 
     return (
         <>
@@ -49,10 +46,10 @@ export const ShoppingItem: FunctionComponent<Props> = ({ item, openModal }) => {
                     {/* <!--アイテム名--> */}
                     {item.itemName}
                 </div>
-                <div className="mr-3">
+                <div className="mr-3 ml-0">
                     <button
+                        onClick={(e) => onClickPlus(e, item.itemId)}
                         className="align-middle mr-2"
-                        onClick={(e) => onClickPlus(e)}
                     // @click.stop="incrementValue(item.id)"
                     >
                         {/* <!--プラスボタン--> */}
@@ -60,13 +57,12 @@ export const ShoppingItem: FunctionComponent<Props> = ({ item, openModal }) => {
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
                         </svg>
                     </button>
-                    <span className="border rounded-lg px-4 py-2 text-xs">
-                        {/* {{item.value + item.unit_name}} */}
+                    <span className="border rounded-lg px-2 py-2 text-xs">
+                        {item.amount + item.unitName}
                     </span>
                     <button
-                        // :disabled="item.value === 0"
+                        onClick={(e) => onClickMinus(e, item.itemId)}
                         className="align-middle ml-2"
-                    // @click.stop="decrementValue(item.id)"
                     >
                         {/* <!--マイナスボタン--> */}
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
@@ -76,7 +72,8 @@ export const ShoppingItem: FunctionComponent<Props> = ({ item, openModal }) => {
                 </div>
                 <div className="mr-0">
                     <button
-                        className="px-4 py-2 bg-red-500 active:bg-red-700 sm:hover:bg-red-700 text-white rounded-lg font-bold text-xs ml-5"
+                        onClick={() => onClickDeleteButton(item.itemId)}
+                        className="px-4 py-2 bg-red-500 active:bg-red-700 sm:hover:bg-red-700 text-white rounded-lg font-bold text-xs"
                         // @click="deleteMemoItem(item)"
                     >削除</button>
                 {/* <!--削除--> */}
